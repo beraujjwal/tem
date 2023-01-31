@@ -8,18 +8,21 @@ const twochars = makeValidator(x => {
 
 const validateEnv = () => {
   cleanEnv(process.env, {
-    NODE_ENV: str(),
+    NODE_ENV: str({ choices: ['development', 'test', 'production', 'staging']}),
     PORT: port(),
   }, {
     reporter: ({ errors, env }) => {
-        //emailSiteAdmins('Invalid env vars: ' + Object.keys(errors));
+        // emailSiteAdmins('Invalid env vars: ' + Object.keys(errors));
         for (const [envVar, err] of Object.entries(errors)) {
           if (err instanceof EnvError) {
-            // emailSiteAdmins
+            // emailSiteAdmins('Invalid env vars: ' + Object.keys(errors));
+            console.log(Object.keys(errors))
           } else if (err instanceof EnvMissingError) {
-            // emailSiteAdmins
+            // emailSiteAdmins('Invalid env vars: ' + Object.keys(errors));
+            console.log(Object.keys(errors))
           } else {
-            // emailSiteAdmins
+            // emailSiteAdmins('Invalid env vars: ' + Object.keys(errors));
+            console.log(Object.keys(errors))
           }
         }
     }

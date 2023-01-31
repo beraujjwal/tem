@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 
-interface Resource {
+export interface Resource {
   resource: string;
   full: boolean;
   create: boolean;
@@ -10,14 +10,8 @@ interface Resource {
   deny: boolean;
 }
 
-interface Role {
+export interface Role {
   resource: string;
-  full: boolean;
-  create: boolean;
-  delete: boolean;
-  update: boolean;
-  read: boolean;
-  deny: boolean;
 }
 
 export interface User {

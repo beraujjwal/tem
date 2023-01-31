@@ -1,6 +1,3 @@
-import compression from 'compression';
-import cookieParser from 'cookie-parser';
-import cors from 'cors';
 import express from 'express';
 //import helmet from 'helmet';
 //import hpp from 'hpp';
@@ -8,27 +5,35 @@ import morgan from 'morgan';
 import { connect, set } from 'mongoose';
 //import swaggerJSDoc from 'swagger-jsdoc';
 //import swaggerUi from 'swagger-ui-express';
-import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS } from './config';
-import { dbConnection } from './databases';
-import { Routes } from './interfaces/routes.interface';
-import errorMiddleware from './middlewares/error.middleware';
-import { logger, stream } from './utils/logger';
+import { NODE_ENV, PORT, LOG_FORMAT } from '../config';
+import { dbConnection } from './core/databases';
+import { Routes } from 'system/core/interfaces/routes.interface';
+import errorMiddleware from 'system/core/middlewares/error.middleware';
+import { logger, stream } from './core/services/logger.service';
+import validateEnv from './core/utils/validateEnv';
+import CORS from './core/middlewares/cors.middleware';
+import Http from './core/middlewares/http.middleware';
+//import ServerMetrics from './core/providers/serverMetrics.provider';
+import { MongooseService } from './core/services/mongoose.service';
 
 class App {
   public app: express.Application;
   public env: string;
   public port: string | number;
+  private count: number = 0;
 
   constructor(routes: Routes[]) {
     this.app = express();
     this.env = NODE_ENV || 'development';
-    this.port = PORT || 3000;
+    this.port = PORT || 8080;
 
+    this.validateEnv();
     this.connectToDatabase();
     this.initializeMiddlewares();
     this.initializeRoutes(routes);
     //this.initializeSwagger();
     this.initializeErrorHandling();
+    this.realtimeServerMetrics();
   }
 
   public listen() {
@@ -45,28 +50,23 @@ class App {
   }
 
   private connectToDatabase() {
-    if (this.env !== 'production') {
-      set('debug', true);
-    }
-
-    connect(dbConnection.url/*, dbConnection.options*/);
+    new MongooseService();
   }
 
   private initializeMiddlewares() {
     this.app.use(morgan(LOG_FORMAT, { stream }));
-    this.app.use(cors({ origin: ORIGIN, credentials: CREDENTIALS }));
-    //this.app.use(hpp());
-    //this.app.use(helmet());
-    this.app.use(compression());
-    this.app.use(express.json());
-    this.app.use(express.urlencoded({ extended: true }));
-    this.app.use(cookieParser());
+    this.app = CORS.initialize(this.app);
+    this.app = Http.initialize(this.app); 
   }
 
   private initializeRoutes(routes: Routes[]) {
     routes.forEach(route => {
       this.app.use('/', route.router);
     });
+  }
+
+  private validateEnv() {
+    validateEnv()
   }
 
   // private initializeSwagger() {
@@ -87,6 +87,10 @@ class App {
 
   private initializeErrorHandling() {
     this.app.use(errorMiddleware);
+  }
+
+  private realtimeServerMetrics() {
+    //this.app = ServerMetrics.initialize(this.app);
   }
 }
 

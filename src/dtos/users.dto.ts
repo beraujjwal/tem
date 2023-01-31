@@ -6,19 +6,25 @@ import {
   Length,
   IsEmail,
   IsString,
+  IsBoolean,
   IsFQDN,
   IsDate,
   Min,
   Max,
+  IsOptional,
+  ValidateNested,
+  IsIn,
 } from 'class-validator';
 
-export class CreateUserDto {
-  @IsEmail()
-  public email: string;
+import { Type } from 'class-transformer';
 
-  @Length(10)
-  public phone: number;
+import { ICreateUserDto } from './users/create.user.dto';
+import { IPatchUserDto } from './users/patch.user.dto';
+import { IPutUserDto } from './users/put.user.dto';
 
-  @IsString()
-  public password: string;
+
+import { Resource } from '../interfaces/users.interface';
+
+export class CreateUserDto extends ICreateUserDto {
+
 }

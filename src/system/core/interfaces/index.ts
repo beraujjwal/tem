@@ -1,5 +1,5 @@
-import { IRequest } from './IRequest';
-import { IResponse } from './IResponse';
-import { INext } from './INext';
+import { IRequest } from './request.interface';
+import { IResponse } from './response.interface';
+import { INext } from './next.interface';
 
 export { IRequest, IResponse, INext };

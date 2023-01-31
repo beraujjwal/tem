@@ -22,20 +22,20 @@ export class ApiError extends Error {
   }
   
   export class NotFoundError extends ApiError {
-    constructor(path: string) {
-      super(404, `The requested path ${path} not found!`);
+    constructor(statusCode: number = 404, path: string) {
+      super(statusCode, `The requested path ${path} not found!`);
     }
   }
   
   export class BadRequestError extends ApiError {
-    constructor(message: string, errors: string[]) {
-      super(500, message, errors);
+    constructor(statusCode: number = 500, message: string, errors: string[]) {
+      super(statusCode, message, errors);
     }
   }
   
   export class ApplicationError extends ApiError {
-    constructor(message: string, errors?: string[]) {
-      super(500, message, errors);
+    constructor(statusCode: number = 500, message: string, errors?: string[]) {
+      super(statusCode, message, errors);
     }
   }
   

@@ -20,7 +20,7 @@ class App {
   public app: express.Application;
   public env: string;
   public port: string | number;
-  private count: number = 0;
+  private count = 0;
 
   constructor(routes: Routes[]) {
     this.app = express();
@@ -56,17 +56,17 @@ class App {
   private initializeMiddlewares() {
     this.app.use(morgan(LOG_FORMAT, { stream }));
     this.app = CORS.initialize(this.app);
-    this.app = Http.initialize(this.app); 
+    this.app = Http.initialize(this.app);
   }
 
   private initializeRoutes(routes: Routes[]) {
-    routes.forEach(route => {
+    routes.forEach((route) => {
       this.app.use('/', route.router);
     });
   }
 
   private validateEnv() {
-    validateEnv()
+    validateEnv();
   }
 
   // private initializeSwagger() {

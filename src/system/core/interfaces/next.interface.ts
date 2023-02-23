@@ -1,3 +1,3 @@
 import { NextFunction } from 'express';
 
-export interface INext extends NextFunction {}
+export type INext = NextFunction;

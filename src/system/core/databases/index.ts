@@ -5,5 +5,5 @@ export const dbConnection = {
   options: {
     useNewUrlParser: true,
     useUnifiedTopology: true
-  },
+  }
 };

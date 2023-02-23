@@ -1,25 +1,37 @@
-'use strict';
-const autoBind = require('auto-bind');
-const { base } = require('../base');
+import { index } from "../index";
 
-const {
+import {
   successResponse,
   errorResponse,
   notFoundResponse,
   validationError,
-  unauthorizedResponse,
-} = require('../helpers/apiResponse');
+  unauthorizedResponse
+} from '../helpers/apiResponse.helper';
 
-const { log, error, info } = require('../helpers/errorLogs');
+import { log, error, info } from '../helpers/errorLogs.helper';
 
-class baseController extends base {
+import { IRequest, IResponse, INext } from '../interfaces/index';
+
+class baseController implements index {
+
+  public service: any
+  public success: any
+  public notFound: any
+  public error: any
+  public validationError: any
+  public unauthorized: any
+
+  public log: any
+  public errorLog: any
+  public infoLog: any
+
   /**
    * Base Controller Layer
    * @author Ujjwal Bera
    * @param null
    */
-  constructor(service) {
-    super();
+  constructor(service: any) {
+
     this.service = service;
     this.success = successResponse;
     this.notFound = notFoundResponse;
@@ -30,10 +42,9 @@ class baseController extends base {
     this.log = log;
     this.errorLog = error;
     this.infoLog = info;
-    autoBind(this);
   }
 
-  async getAll(req, res, next) {
+  async getAll(req: IRequest, res: IResponse, next: INext) {
     try {
       const response = await this.service.getAll(req.query);
       return res.status(200).json(this.success(response));
@@ -42,7 +53,7 @@ class baseController extends base {
     }
   }
 
-  async get(req, res, next) {
+  async get(req: IRequest, res: IResponse, next: INext) {
     const { id } = req.params;
 
     try {
@@ -53,7 +64,7 @@ class baseController extends base {
     }
   }
 
-  async insert(req, res, next) {
+  async insert(req: IRequest, res: IResponse, next: INext) {
     try {
       const response = await this.service.insert(req.body);
       return res.status(200).json(this.success(response));
@@ -62,7 +73,7 @@ class baseController extends base {
     }
   }
 
-  async update(req, res, next) {
+  async update(req: IRequest, res: IResponse, next: INext) {
     const { id } = req.params;
 
     try {
@@ -73,7 +84,7 @@ class baseController extends base {
     }
   }
 
-  async delete(req, res, next) {
+  async delete(req: IRequest, res: IResponse, next: INext) {
     const { id } = req.params;
 
     try {

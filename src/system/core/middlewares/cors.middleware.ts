@@ -2,23 +2,20 @@ import cors from 'cors';
 import { Application } from 'express';
 import { CORS_ENABLED, ORIGIN, CREDENTIALS, APP_URL } from '../config';
 
-
 class CORS {
+  public initialize(_express: Application): Application {
+    const origin = CORS_ENABLED ? ORIGIN : APP_URL;
 
-	public initialize(_express: Application): Application {
+    const options: cors.CorsOptions = {
+      origin: origin,
+      credentials: CREDENTIALS,
+      optionsSuccessStatus: 200
+    };
 
-		const origin = CORS_ENABLED ? ORIGIN : APP_URL
+    _express.use(cors(options));
 
-		const options: cors.CorsOptions = {
-			origin: origin,
-			credentials: CREDENTIALS,
-			optionsSuccessStatus: 200
-		};
-
-		_express.use(cors(options));
-
-		return _express;
-	}
+    return _express;
+  }
 }
 
-export default new CORS;
+export default new CORS();

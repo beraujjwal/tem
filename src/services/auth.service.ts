@@ -12,10 +12,14 @@ class AuthService {
   public users = userModel;
 
   public async signup(userData: CreateUserDto): Promise<User> {
-    if (isEmpty(userData)) throw new HttpException(400, "userData is empty");
+    if (isEmpty(userData)) throw new HttpException(400, 'userData is empty');
 
     const findUser: User = await this.users.findOne({ email: userData.email });
-    if (findUser) throw new HttpException(409, `This email ${userData.email} already exists`);
+    if (findUser)
+      throw new HttpException(
+        409,
+        `This email ${userData.email} already exists`
+      );
 
     //const hashedPassword = await hash(userData.password, 10);
     const createUserData: User = await this.users.create({ ...userData });
@@ -23,14 +27,21 @@ class AuthService {
     return createUserData;
   }
 
-  public async login(userData: CreateUserDto): Promise<{ cookie: string; findUser: User }> {
-    if (isEmpty(userData)) throw new HttpException(400, "userData is empty");
+  public async login(
+    userData: CreateUserDto
+  ): Promise<{ cookie: string; findUser: User }> {
+    if (isEmpty(userData)) throw new HttpException(400, 'userData is empty');
 
     const findUser: User = await this.users.findOne({ email: userData.email });
-    if (!findUser) throw new HttpException(409, `This email ${userData.email} was not found`);
+    if (!findUser)
+      throw new HttpException(
+        409,
+        `This email ${userData.email} was not found`
+      );
 
-    const isPasswordMatching: boolean = true; //await compare(userData.password, findUser.password);
-    if (!isPasswordMatching) throw new HttpException(409, "Password is not matching");
+    const isPasswordMatching = true; //await compare(userData.password, findUser.password);
+    if (!isPasswordMatching)
+      throw new HttpException(409, 'Password is not matching');
 
     const tokenData = this.createToken(findUser);
     const cookie = this.createCookie(tokenData);
@@ -39,10 +50,17 @@ class AuthService {
   }
 
   public async logout(userData: User): Promise<User> {
-    if (isEmpty(userData)) throw new HttpException(400, "userData is empty");
+    if (isEmpty(userData)) throw new HttpException(400, 'userData is empty');
 
-    const findUser: User = await this.users.findOne({ email: userData.email, password: userData.password });
-    if (!findUser) throw new HttpException(409, `This email ${userData.email} was not found`);
+    const findUser: User = await this.users.findOne({
+      email: userData.email,
+      password: userData.password
+    });
+    if (!findUser)
+      throw new HttpException(
+        409,
+        `This email ${userData.email} was not found`
+      );
 
     return findUser;
   }
@@ -52,7 +70,10 @@ class AuthService {
     const secretKey: string = SECRET_KEY;
     const expiresIn: number = 60 * 60;
 
-  return { expiresIn, token: 'dasdas' /*sign(dataStoredInToken, secretKey, { expiresIn })*/ };
+    return {
+      expiresIn,
+      token: 'dasdas' /*sign(dataStoredInToken, secretKey, { expiresIn })*/
+    };
   }
 
   public createCookie(tokenData: TokenData): string {

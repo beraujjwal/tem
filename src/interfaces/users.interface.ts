@@ -24,7 +24,7 @@ export interface User {
   roles: string[];
   loginAttempts: number;
   blockExpires: Date;
-  rights: [Resource]
+  rights: [Resource];
 }
 
 export interface IUser extends Document, User {

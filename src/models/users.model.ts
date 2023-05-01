@@ -122,7 +122,7 @@ schema.pre('save', async function (next) {
     user.blockExpires = new Date(Date.now() + 60 * 5 * 1000);
   }
 
-  const emailCriteria = {
+  /*const emailCriteria = {
     email: user.email,
     verified: true,
     deleted: false,
@@ -166,7 +166,7 @@ schema.pre('save', async function (next) {
         next();
       }
     }
-  );
+  );*/
 });
 
 const userModel = model<IUser>('User', schema);

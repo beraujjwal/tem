@@ -12,7 +12,7 @@ import { log, error, info } from '../helpers/errorLogs.helper';
 
 import { IRequest, IResponse, INext } from '../interfaces/index';
 
-class baseController implements index {
+export class baseController implements index {
 
   public service: any
   public success: any
@@ -28,10 +28,10 @@ class baseController implements index {
   /**
    * Base Controller Layer
    * @author Ujjwal Bera
-   * @param null
+   * @param service: any
    */
   constructor(service: any) {
-
+    
     this.service = service;
     this.success = successResponse;
     this.notFound = notFoundResponse;
@@ -43,6 +43,9 @@ class baseController implements index {
     this.errorLog = error;
     this.infoLog = info;
   }
+
+  
+  
 
   async getAll(req: IRequest, res: IResponse, next: INext) {
     try {
@@ -95,5 +98,3 @@ class baseController implements index {
     }
   }
 }
-
-export default { baseController };

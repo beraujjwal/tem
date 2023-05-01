@@ -37,6 +37,7 @@ class UsersController {
     next: NextFunction
   ) => {
     try {
+      
       const userData: CreateUserDto = req.body;
       const createUserData: User = await this.userService.createUser(userData);
 

@@ -1,7 +1,7 @@
 import { plainToClass } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
 import { RequestHandler } from 'express';
-import { HttpException } from '../system/core/exceptions/HttpException';
+import { DataValidationError } from '../system/core/exceptions/HttpException';
 
 const validationMiddleware = (
   type: any,
@@ -20,13 +20,18 @@ const validationMiddleware = (
         console.log(errors)
         const message = errors
           .map((error: ValidationError) => {
-            return Object.values(error.constraints)/*{
-              key: error.property,
-              message: Object.values(error.constraints)
-            }*/
-          })
-          .join(', ');
-        next(new HttpException(400, message));
+            let phoneNumber = error.value;
+            let phoneLength = phoneNumber.toString().length;
+            console.log(phoneLength)
+            //return Object.values(error.constraints)
+            return {
+              [error.property]: Object.values(error.constraints)[0]
+            }
+
+          });//
+          //.join(', ');
+          return new DataValidationError(403, 'Invalid Data', message);
+          //res.status(status).json({ message });
       } else {
         next();
       }

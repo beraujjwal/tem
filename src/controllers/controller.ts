@@ -6,11 +6,11 @@ class Controller extends baseController {
 
   public service: any
 
-  constructor(service) {    
+  constructor(service) {
     super(service);
   }
 
-  
+
   async getAllItems(req: IRequest, res: IResponse, next: INext) {
     try {
       const users = await this.service.list(100, 0);
@@ -31,7 +31,7 @@ class Controller extends baseController {
 
   async storeItem(req: IRequest, res: IResponse, next: INext) {
     try {
-      req.body.password = await argon2.hash(req.body.password);
+      //req.body.password = await argon2.hash(req.body.password);
       const userId = await this.service.create(req.body);
       res.status(201).send({ id: userId });
     } catch (error) {

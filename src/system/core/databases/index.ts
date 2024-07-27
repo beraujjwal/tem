@@ -1,9 +1,23 @@
-import { DB_HOST, DB_PORT, DB_DATABASE } from '../../../config';
+import mongoose from 'mongoose';
+import { DBConnection } from '../../../config/db.config';
+import { NODE_ENV } from '../../../config';
 
-export const dbConnection = {
-  url: `mongodb://${DB_HOST}:${DB_PORT}/${DB_DATABASE}`,
-  options: {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  }
-};
+
+export const connectDatabase = async () => {
+
+  mongoose
+  .connect(DBConnection.url, { retryWrites: true, w: 'majority' })
+    .then(() => {
+      console.info(`Running on ENV = ${NODE_ENV}`);
+      console.info('Connected to mongoDB.');
+    })
+    .catch((error) => {
+      console.error('Unable to connect.');
+      console.error(error);
+    });
+
+    if (NODE_ENV !== 'production') {
+      mongoose.set('debug', true);
+    }
+    mongoose.set('strictQuery', true);
+}

@@ -6,15 +6,14 @@ import { connect, set } from 'mongoose';
 //import swaggerJSDoc from 'swagger-jsdoc';
 //import swaggerUi from 'swagger-ui-express';
 import { NODE_ENV, PORT, LOG_FORMAT } from '../config';
-import { dbConnection } from './core/databases';
+import { connectDatabase } from './core/databases';
 import { Routes } from 'system/core/interfaces/routes.interface';
 import errorMiddleware from 'system/core/middlewares/error.middleware';
 import { logger, stream } from './core/services/logger.service';
 import validateEnv from './core/utils/validateEnv';
 import CORS from './core/middlewares/cors.middleware';
 import Http from './core/middlewares/http.middleware';
-//import ServerMetrics from './core/providers/serverMetrics.provider';
-import { MongooseService } from './core/services/mongoose.service';
+
 
 class App {
   public app: express.Application;
@@ -28,7 +27,7 @@ class App {
     this.port = PORT || 8080;
 
     this.validateEnv();
-    this.connectToDatabase();
+    //this.connectToDatabase();
     this.initializeMiddlewares();
     this.initializeRoutes(routes);
     //this.initializeSwagger();
@@ -50,7 +49,7 @@ class App {
   }
 
   private connectToDatabase() {
-    new MongooseService();
+    connectDatabase();
   }
 
   private initializeMiddlewares() {

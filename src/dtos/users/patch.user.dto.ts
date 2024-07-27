@@ -20,4 +20,4 @@
 
 import { IPutUserDto } from './put.user.dto';
 
-export class IPatchUserDto extends Partial<IPutUserDto> {}
+export class IPatchUserDto extends IPutUserDto {}

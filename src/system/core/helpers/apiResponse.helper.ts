@@ -1,4 +1,4 @@
-export interface response {      
+export interface response {
     error: boolean,
     code: number,
     message: string,
@@ -90,7 +90,7 @@ const errorResponse = (err: any, code: number): response => {
     { code: 510, indicate: 'Not Extended' },
     { code: 511, indicate: 'Network Authentication Required' },
   ];
-  
+
   let indicate = 'Internal Server Error';
   let statusCode = 500;
 
@@ -102,9 +102,7 @@ const errorResponse = (err: any, code: number): response => {
   }
 
   let message = null;
-  if (typeof err === Object) {
-    message = err.message;
-  } else if (typeof err === 'object') {
+  if (typeof err === 'object') {
     message = err.message;
   } else if (typeof err === 'string') {
     message = err;

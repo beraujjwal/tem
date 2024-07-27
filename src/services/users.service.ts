@@ -1,22 +1,22 @@
 //import { hash } from 'bcrypt';
 import { CreateUserDto } from '../dtos/users.dto';
 import { HttpException } from '../system/core/exceptions/HttpException';
-import { User } from '../interfaces/users.interface';
+import { IUser, User } from '../interfaces/users.interface';
 import userModel from '../models/users.model';
 import { isEmpty } from '../system/core/utils/util';
 
 class UserService {
   public users = userModel;
 
-  public async findAllUser(): Promise<User[]> {
-    const users: User[] = await this.users.find();
+  public async findAllUser(): Promise<IUser[]> {
+    const users: IUser[] = await this.users.find();
     return users;
   }
 
-  public async findUserById(userId: string): Promise<User> {
+  public async findUserById(userId: string): Promise<IUser> {
     if (isEmpty(userId)) throw new HttpException(400, 'UserId is empty');
 
-    const findUser: User = await this.users.findOne({ _id: userId });
+    const findUser: IUser = await this.users.findOne({ _id: userId });
     if (!findUser) throw new HttpException(409, "User doesn't exist");
 
     return findUser;
@@ -41,11 +41,11 @@ class UserService {
   public async updateUser(
     userId: string,
     userData: CreateUserDto
-  ): Promise<User> {
+  ): Promise<IUser> {
     if (isEmpty(userData)) throw new HttpException(400, 'userData is empty');
 
     if (userData.email) {
-      const findUser: User = await this.users.findOne({
+      const findUser: IUser = await this.users.findOne({
         email: userData.email
       });
       if (findUser && findUser._id != userId)
@@ -60,7 +60,7 @@ class UserService {
       userData = { ...userData };
     }
 
-    const updateUserById: User = await this.users.findByIdAndUpdate(userId, {
+    const updateUserById: IUser = await this.users.findByIdAndUpdate(userId, {
       userData
     });
     if (!updateUserById) throw new HttpException(409, "User doesn't exist");
@@ -68,8 +68,8 @@ class UserService {
     return updateUserById;
   }
 
-  public async deleteUser(userId: string): Promise<User> {
-    const deleteUserById: User = await this.users.findByIdAndDelete(userId);
+  public async deleteUser(userId: string): Promise<IUser> {
+    const deleteUserById: IUser = await this.users.findByIdAndDelete(userId);
     if (!deleteUserById) throw new HttpException(409, "User doesn't exist");
 
     return deleteUserById;
